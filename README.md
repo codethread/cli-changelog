@@ -4,23 +4,20 @@ Shared changelog schemas, version selection, pagination, JSON Schema and text re
 
 The package exports `changelogVersionSchema`, `changelogChangeSchema`, `changelogReleaseSchema`, `changelogHistorySchema`, `changelogQuerySchema`, `changelogSchema`, `queryChangelog` and `renderChangelog`, plus the associated TypeScript types. Consumers own their history JSON, installed version, CLI options and output envelope.
 
-## Local setup
+## Consumption
 
-From this checkout:
+Pin the GitHub repository to a full commit SHA in the consumer's `package.json`:
 
-```sh
-bun install --frozen-lockfile
-bun link
+```json
+{
+	"dependencies": {
+		"@codethread/cli-changelog": "github:codethread/cli-changelog#<commit-sha>"
+	}
+}
 ```
 
-Register the package before installing dependencies in a consumer. To add it to a new consumer:
-
-```sh
-bun link --save @codethread/cli-changelog
-```
-
-Qlock and Wktree use the registered package through `link:@codethread/cli-changelog`. Their compiled executables bundle the library and run without this checkout or Bun. Source builds, including CI and Homebrew builds of these commits, require this checkout installed and registered first.
+Commit the consumer's Bun lockfile and install with `bun install --frozen-lockfile`. Qlock and Wktree use this dependency directly for source and CI builds. Their compiled executables bundle the library and run without Bun or a source checkout. The package stays private to npm; Bun installs it from the public GitHub repository.
 
 ## Development
 
-Run `bun run check` for formatting, linting, typechecking and the library tests. The consumer repositories test their own CLI integration against their recorded release data.
+Run `bun install --frozen-lockfile`, then `bun run check` for formatting, linting, typechecking and the library tests. The consumer repositories test their own CLI integration against their recorded release data.

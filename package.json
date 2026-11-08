@@ -3,7 +3,12 @@
 	"version": "0.1.0",
 	"private": true,
 	"description": "Recorded changelog schemas, queries and rendering for Bun CLIs",
+	"homepage": "https://github.com/codethread/cli-changelog",
 	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/codethread/cli-changelog.git"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"
