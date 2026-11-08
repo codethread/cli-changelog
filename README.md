@@ -1,6 +1,6 @@
 # CLI Changelog
 
-Shared changelog schemas, version selection, pagination, JSON Schema and text rendering for Bun CLIs. Requires Bun for semantic version ordering; Zod is the only package dependency.
+Shared changelog schemas, version selection, pagination, JSON Schema and text rendering for Bun CLIs. Requires Bun for semantic version ordering and consumes the application's Zod installation through a `^4.6.5` peer dependency.
 
 The package exports `changelogVersionSchema`, `changelogChangeSchema`, `changelogReleaseSchema`, `changelogHistorySchema`, `changelogQuerySchema`, `changelogSchema`, `queryChangelog` and `renderChangelog`, plus the associated TypeScript types. Consumers own their history JSON, installed version, CLI options and output envelope.
 
@@ -11,7 +11,8 @@ Pin the GitHub repository to a full commit SHA in the consumer's `package.json`:
 ```json
 {
 	"dependencies": {
-		"@codethread/cli-changelog": "github:codethread/cli-changelog#<commit-sha>"
+		"@codethread/cli-changelog": "github:codethread/cli-changelog#<commit-sha>",
+		"zod": "^4.6.5"
 	}
 }
 ```
