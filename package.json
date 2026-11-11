@@ -1,19 +1,29 @@
 {
 	"name": "@codethread/cli-changelog",
 	"version": "0.1.0",
-	"private": true,
 	"description": "Recorded changelog schemas, queries and rendering for Bun CLIs",
 	"homepage": "https://github.com/codethread/cli-changelog",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/codethread/cli-changelog.git"
+		"url": "git+https://github.com/codethread/cli-changelog.git"
 	},
+	"bin": {
+		"cli-changelog": "./src/cli.ts"
+	},
+	"files": [
+		"src",
+		"changelog.json"
+	],
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
+		"changelog": "bun run ./src/cli.ts changelog",
 		"fmt": "oxfmt",
 		"fmt:check": "oxfmt --check",
 		"lint": "oxlint --deny-warnings",

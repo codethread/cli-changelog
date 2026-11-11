@@ -6,19 +6,31 @@ The package exports `changelogVersionSchema`, `changelogChangeSchema`, `changelo
 
 ## Consumption
 
-Pin the GitHub repository to a full commit SHA in the consumer's `package.json`:
+Install the public npm package and its Zod peer dependency:
 
-```json
-{
-	"dependencies": {
-		"@codethread/cli-changelog": "github:codethread/cli-changelog#<commit-sha>",
-		"zod": "^4.6.5"
-	}
-}
+```sh
+bun add @codethread/cli-changelog zod@^4.6.5
 ```
 
-Commit the consumer's Bun lockfile and install with `bun install --frozen-lockfile`. Qlock and Wktree use this dependency directly for source and CI builds. Their compiled executables bundle the library and run without Bun or a source checkout. The package stays private to npm; Bun installs it from the public GitHub repository.
+Commit the consumer's Bun lockfile and install with `bun install --frozen-lockfile` in CI. The package exports TypeScript source for Bun consumers. Compiled Bun executables can bundle the library and run without Bun or a source checkout.
+
+## Changelog
+
+The package records its own releases in [`changelog.json`](changelog.json) and queries them with its own schemas, selection and rendering functions. After installing the package, use its Bun-powered command:
+
+```sh
+bunx --bun @codethread/cli-changelog changelog
+bunx --bun @codethread/cli-changelog changelog --since 0.1.0 --json
+bunx --bun @codethread/cli-changelog changelog --release 0.1.0
+bunx --bun @codethread/cli-changelog changelog --schema
+```
+
+In this repository, use `bun run changelog` with the same options. `--limit` and `--offset` paginate changes; without a version selector, the command shows the latest recorded release. The installed command reads only packaged history and requires no Git checkout or network access.
 
 ## Development
 
 Run `bun install --frozen-lockfile`, then `bun run check` for formatting, linting, typechecking and the library tests. The consumer repositories test their own CLI integration against their recorded release data.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

@@ -1,0 +1,26 @@
+[
+	{
+		"version": "0.1.0",
+		"changes": [
+			{
+				"commit": "1587bc06696b5d4daf483cee6531188499a4f2e7",
+				"summary": "Extract shared changelog schemas, queries and rendering for Bun CLIs.",
+				"body": "Provide version selection, pagination, JSON Schema and human-readable rendering over recorded release history.",
+				"breaking": [],
+				"adoption": []
+			},
+			{
+				"commit": "f2d7736ebb310780d1b8c08bb0bb3cd077c82dec",
+				"summary": "Consume the application's Zod installation through a peer dependency.",
+				"body": "",
+				"breaking": [],
+				"adoption": [
+					{
+						"requirement": "required",
+						"text": "Install zod@^4.6.5 alongside @codethread/cli-changelog."
+					}
+				]
+			}
+		]
+	}
+]
