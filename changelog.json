@@ -1,5 +1,17 @@
 [
 	{
+		"version": "0.1.1",
+		"changes": [
+			{
+				"commit": "e6bb48ecb5b8965192c07647af15176445641065",
+				"summary": "Record and query this package's own changelog using its shared library.",
+				"body": "Ship recorded release history and a Bun-powered cli-changelog command with text, JSON, release selection, pagination and JSON Schema output. Run bun run changelog in the repository or cli-changelog changelog after installation.",
+				"breaking": [],
+				"adoption": []
+			}
+		]
+	},
+	{
 		"version": "0.1.0",
 		"changes": [
 			{

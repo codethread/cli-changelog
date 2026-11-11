@@ -1,6 +1,6 @@
 {
 	"name": "@codethread/cli-changelog",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Recorded changelog schemas, queries and rendering for Bun CLIs",
 	"homepage": "https://github.com/codethread/cli-changelog",
 	"license": "MIT",
