@@ -3,6 +3,7 @@ import {
 	changelogQuerySchema,
 	changelogSchema,
 	queryChangelog,
+	renderChangelogMarkdown,
 } from "../src/index.ts";
 import { expect, test } from "bun:test";
 import history from "../changelog.json";
@@ -29,6 +30,11 @@ async function run(
 	]);
 	return { exitCode, stdout, stderr };
 }
+
+test("the repository Markdown changelog matches its complete recorded history", async () => {
+	const markdown = await Bun.file(new URL("../CHANGELOG.md", import.meta.url)).text();
+	expect(markdown).toBe(renderChangelogMarkdown({ title: manifest.name, history: releases }));
+});
 
 test("CLI queries its packaged history using the library", async () => {
 	expect(releases.some((release) => release.version === manifest.version)).toBe(true);

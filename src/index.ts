@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export { renderChangelogMarkdown } from "./markdown.ts";
+
 const FIRST = 0;
 const ONE = 1;
 const DEFAULT_LIMIT = 20;
@@ -12,16 +14,26 @@ const adoptionSchema = z.strictObject({
 	requirement: z.enum(["optional", "required"]),
 	text: z.string().min(ONE),
 });
+export const changelogCategorySchema = z.enum([
+	"added",
+	"changed",
+	"deprecated",
+	"removed",
+	"fixed",
+	"security",
+]);
 export const changelogChangeSchema = z.strictObject({
 	commit: z.string().min(ONE),
 	summary: z.string().min(ONE),
 	body: z.string(),
 	breaking: z.array(z.string().min(ONE)),
 	adoption: z.array(adoptionSchema),
+	category: changelogCategorySchema.optional(),
 });
 export const changelogReleaseSchema = z.strictObject({
 	version: changelogVersionSchema,
 	changes: z.array(changelogChangeSchema),
+	date: z.iso.date().optional(),
 });
 export const changelogHistorySchema = z.array(changelogReleaseSchema);
 export const changelogQuerySchema = z
@@ -55,6 +67,7 @@ const pageSchema = z.strictObject({
 		.optional()
 		.describe("Continue with --offset when present; absent means exhausted."),
 });
+export type ChangelogCategory = z.infer<typeof changelogCategorySchema>;
 export type ChangelogChange = z.infer<typeof changelogChangeSchema>;
 export type ChangelogRelease = z.infer<typeof changelogReleaseSchema>;
 export type ChangelogQuery = z.infer<typeof changelogQuerySchema>;
@@ -90,6 +103,13 @@ export function changelogSchema(): z.core.JSONSchema.JSONSchema {
 	return z.toJSONSchema(pageSchema);
 }
 
+function releaseWithChanges(
+	release: ChangelogRelease,
+	changes: ChangelogChange[],
+): ChangelogRelease {
+	return { ...release, changes };
+}
+
 /** Query only recorded package history; no repository, configuration or network dependencies. */
 // eslint-disable-next-line max-statements -- Keep selection, pagination and its completeness metadata together.
 export function queryChangelog(
@@ -116,13 +136,16 @@ export function queryChangelog(
 		if (release.changes.length === FIRST) {
 			return [release];
 		}
-		return release.changes.map((change) => ({ version: release.version, changes: [change] }));
+		return release.changes.map((change) => releaseWithChanges(release, [change]));
 	});
 	const page = entries.slice(query.offset, query.offset + limit);
-	const releases = [...new Set(page.map((entry) => entry.version))].map((version) => ({
-		version,
-		changes: page.filter((entry) => entry.version === version).flatMap((entry) => entry.changes),
-	}));
+	const releases = [...new Map(page.map((entry) => [entry.version, entry])).values()].map(
+		(release) =>
+			releaseWithChanges(
+				release,
+				page.filter((entry) => entry.version === release.version).flatMap((entry) => entry.changes),
+			),
+	);
 	const end = query.offset + page.length;
 	let nextOffset: number | undefined = undefined;
 	if (end < entries.length) {
@@ -157,13 +180,21 @@ export function renderChangelog(page: ChangelogPage): string {
 		lines.push("No recorded releases match this page.");
 	}
 	for (const release of page.releases) {
-		lines.push("", release.version);
+		let heading = release.version;
+		if (release.date !== undefined) {
+			heading += ` - ${release.date}`;
+		}
+		lines.push("", heading);
 		if (release.changes.length === FIRST) {
 			lines.push("No recorded changes.");
 		}
 		for (const change of release.changes) {
+			let { summary } = change;
+			if (change.category !== undefined) {
+				summary = `[${change.category}] ${summary}`;
+			}
 			lines.push(
-				`- ${change.summary} (${change.commit.slice(FIRST, SHORT_HASH_LENGTH)})`,
+				`- ${summary} (${change.commit.slice(FIRST, SHORT_HASH_LENGTH)})`,
 				...change.breaking.map((note) => `  BREAKING: ${note}`),
 				...change.adoption.map((note) => `  Adoption (${note.requirement}): ${note.text}`),
 			);

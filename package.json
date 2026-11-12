@@ -24,6 +24,7 @@
 	},
 	"scripts": {
 		"changelog": "bun run ./src/cli.ts changelog",
+		"changelog:generate": "bun run ./scripts/generate-changelog.ts",
 		"fmt": "oxfmt",
 		"fmt:check": "oxfmt --check",
 		"lint": "oxlint --deny-warnings",
