@@ -1,0 +1,16 @@
+min_version = "2026.10.4"
+
+[tools]
+bun = "1.4.2"
+
+# Repository bootstrap must not install unrelated global tools.
+[settings]
+enable_tools = ["bun"]
+
+[tasks.default]
+description = "Prepare the cli-changelog checkout"
+depends = ["bootstrap"]
+
+[tasks.bootstrap]
+description = "Install locked dependencies and regenerate the changelog"
+run = ["bun install --frozen-lockfile", "bun run changelog:generate"]

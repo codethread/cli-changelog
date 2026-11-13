@@ -14,6 +14,10 @@ bun add @codethread/cli-changelog zod@^4.6.5
 
 Commit the consumer's Bun lockfile and install with `bun install --frozen-lockfile` in CI. The package exports TypeScript source for Bun consumers. Compiled Bun executables can bundle the library and run without Bun or a source checkout.
 
+## Development setup
+
+Install [mise](https://mise.jdx.dev), review this repository's `mise.toml`, trust it once, then run `mise run` from the repository root. The default task is also available as `mise run bootstrap`; it selects Bun 1.4.2, installs all root workspace dependencies from the frozen lockfile, and regenerates this repository's `CHANGELOG.md`. Re-running setup is safe. Run `bun run check` for formatting, linting, typechecking and tests.
+
 ## Changelog
 
 The package records its own releases in [`changelog.json`](changelog.json), generates [`CHANGELOG.md`](CHANGELOG.md), and queries them with its own schemas, selection and rendering functions. After installing the package, use its Bun-powered command:

@@ -11,6 +11,9 @@
 	"bin": {
 		"cli-changelog": "./src/cli.ts"
 	},
+	"workspaces": [
+		".botlake"
+	],
 	"files": [
 		"src",
 		"changelog.json"
@@ -25,10 +28,10 @@
 	"scripts": {
 		"changelog": "bun run ./src/cli.ts changelog",
 		"changelog:generate": "bun run ./scripts/generate-changelog.ts",
-		"fmt": "oxfmt",
-		"fmt:check": "oxfmt --check",
-		"lint": "oxlint --deny-warnings",
-		"typecheck": "tsc --noEmit",
+		"fmt": "oxfmt && bun run --filter cli-changelog-lake fmt",
+		"fmt:check": "oxfmt --check && bun run --filter cli-changelog-lake fmt:check",
+		"lint": "oxlint --deny-warnings && bun run --filter cli-changelog-lake lint",
+		"typecheck": "tsc --noEmit && bun run --filter cli-changelog-lake typecheck",
 		"test": "bun test ./tests",
 		"check": "bun run fmt:check && bun run lint && bun run typecheck && bun run test"
 	},
@@ -42,5 +45,9 @@
 	},
 	"peerDependencies": {
 		"zod": "^4.6.5"
-	}
+	},
+	"overrides": {
+		"@botlake/core": "0.2.1"
+	},
+	"packageManager": "bun@1.4.2"
 }
