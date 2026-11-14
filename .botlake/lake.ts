@@ -1,4 +1,4 @@
-import agents from "./src/agents.ts";
+import agents, { mailExtensions } from "./src/agents.ts";
 import batteriesExtension from "@botlake/extension-batteries";
 import { createLake } from "@botlake/core";
 import flags from "./src/flags.ts";
@@ -17,6 +17,7 @@ export const lake = createLake({
 		flags,
 		references,
 		agents,
+		...mailExtensions,
 		priming,
 		ui,
 		work,

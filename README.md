@@ -4,6 +4,8 @@ Shared changelog schemas, version selection, pagination, JSON Schema and text re
 
 The package exports `changelogVersionSchema`, `changelogCategorySchema`, `changelogChangeSchema`, `changelogReleaseSchema`, `changelogHistorySchema`, `changelogQuerySchema`, `changelogSchema`, `queryChangelog`, `renderChangelog` and `renderChangelogMarkdown`, plus the associated TypeScript types. Consumers own their history JSON, installed version, CLI options and output envelope.
 
+The repository lake selects Mail for direct agent messages, identity links, and automatic live delivery or session resumption within five minutes of a normal stop. Use `bl prime mail` for the messaging runbook.
+
 ## Consumption
 
 Install [@codethread/cli-changelog from npm](https://www.npmjs.com/package/@codethread/cli-changelog) and its Zod peer dependency:
